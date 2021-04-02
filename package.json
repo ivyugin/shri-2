@@ -1,0 +1,14 @@
+{
+  "name": "shri-2",
+  "version": "1.0.0",
+  "description": "В этом репозитории находятся материалы тестового задания «Данные для Stories» для [17-й Школы разработки интерфейсов](https://yandex.ru/promo/academy/shri) (лето-2021, Москва).",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "start": "node ./build/index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
