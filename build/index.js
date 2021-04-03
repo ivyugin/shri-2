@@ -47,7 +47,7 @@ function prepareData(entities, { sprintId } ) {
 
   const commitsLeader = leaders(sprintCommits, users);
  
-  return JSON.stringify([
+  return [
     {
       alias: 'vote',
       data: {
@@ -85,7 +85,7 @@ function prepareData(entities, { sprintId } ) {
         "categories": diagram(sprintCommits, summaries, previousSprintCommits)
       }
     }
-  ])
+  ]
 }
 
 function chart(commits, allSprints, currentSprintId) {
