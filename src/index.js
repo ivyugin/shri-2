@@ -1,12 +1,9 @@
-//const entity = require('../examples/input.json');
-
-const leaders = require('./leaders');
-const vote = require('./vote');
-const chart = require('./chart');
-const diagram = require('./diagram');
-
-
 function prepareData(entities, { sprintId } ) {
+
+  const leaders = require('./leaders');
+  const vote = require('./vote');
+  const chart = require('./chart');
+  const diagram = require('./diagram');
 
   let sprints = [];
   let users = [];
@@ -96,6 +93,4 @@ function prepareData(entities, { sprintId } ) {
   ])
 }
 
-//console.log(prepareData(entity, { sprintId: 977 }))
-
-module.exports = {prepareData}
+module.exports = prepareData;
