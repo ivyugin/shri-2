@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node ./src/index.js",
     "build": "webpack",
-    "test": "node ./test.js"
+    "test": "node ./build/index.js"
   },
   "author": "",
   "license": "ISC",

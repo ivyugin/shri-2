@@ -1,5 +1,5 @@
 const entity = require('./examples/input.json');
-const prepareData = require('./src/index.js');
+const {prepareData} = require('./build/index.js');
 
 console.log(prepareData)
 
