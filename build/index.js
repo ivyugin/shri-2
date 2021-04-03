@@ -1,1 +1,285 @@
-(()=>{var e={460:e=>{e.exports=function(e,t,a){const i=[];return t.forEach((e=>{let t={title:e.id,hint:e.name,value:0};e.id===a&&(t.active=!0),i.push(t)})),e.forEach((e=>{e.sprintId=t.find((t=>e.timestamp>=t.startAt&&e.timestamp<=t.finishAt)).id;let a=i.findIndex((t=>t.title===e.sprintId));-1!=a&&(i[a].value+=1)})),i.sort(((e,t)=>e.title<t.title?-1:e.title>t.title?1:0)),i}},508:e=>{function t(e,t){const i=e-t;return`${i>0?"+"+i:i} ${a(Math.abs(i),"commit")}`}function a(e,t){return words={commit:["коммит","коммита","коммитов"]},e>=10&&e<20?words[t][2]:e%10==1?words[t][0]:e%10<5?words[t][1]:words[2]}e.exports=function(e,i,r){let s=0,n=0,o=0,l=0;r.forEach(((e,t)=>{const a=e.summaries.reduce(((e,t)=>{if("object"==typeof t)return e+t.added+t.removed;{const a=i.find((e=>e.id===t));return e+a.added+a.removed}}),0);a<=100?s+=1:a<=500?n+=1:a<=1e3?o+=1:l+=1}));let u=0,d=0,c=0,f=0;return e.forEach(((e,t)=>{const a=e.summaries.reduce(((e,t)=>{if("object"==typeof t)return e+t.added+t.removed;{const a=i.find((e=>e.id===t));return e+a.added+a.removed}}),0);a<=100?u+=1:a<=500?d+=1:a<=1e3?c+=1:f+=1})),[{title:"> 1001 строки",valueText:`${f} ${a(f,"commit")}`,differenceText:t(f,l)},{title:"501 — 1000 строк",valueText:`${c} ${a(c,"commit")}`,differenceText:t(c,o)},{title:"101 — 500 строк",valueText:`${d} ${a(d,"commit")}`,differenceText:t(d,n)},{title:"1 — 100 строк",valueText:`${u} ${a(u,"commit")}`,differenceText:t(u,s)}]}},138:(e,t,a)=>{e.exports=function(e,{sprintId:t}){const i=a(447),r=a(155),s=a(460),n=a(508);let o=[],l=[],u=[],d=[],c=[];e.forEach((e=>{switch(e.type){case"Sprint":o.push(e);break;case"User":l.push(e);break;case"Comment":u.push(e);break;case"Commit":d.push(e);break;case"Summary":c.push(e)}}));const f=o.find((e=>e.id===t)),m=o.find((e=>e.id===t-1)),x=u.filter((e=>"Comment"===e.type&&e.createdAt>=f.startAt&&e.createdAt<=f.finishAt)),v=d.filter((e=>e.timestamp>=f.startAt&&e.timestamp<=f.finishAt)),h=d.filter((e=>e.timestamp>=m.startAt&&e.timestamp<=m.finishAt)),p=v.length-h.length,T=v.length;let $;$=T%10==1?`${T} коммит`:`${T} коммит${T%10>=5||T%10==0?"ов":"а"}`;const b=i(v,l);return JSON.stringify([{alias:"vote",data:{title:"Самый 🔎 внимательный разработчик",subtitle:f.name,emoji:"🔎",users:r(x,l)}},{alias:"leaders",data:{title:"Больше всего коммитов",subtitle:f.name,emoji:"👑",users:b}},{alias:"chart",data:{title:"Коммиты",subtitle:f.name,values:s(d,o,t),users:b}},{alias:"diagram",data:{title:"Размер коммитов",subtitle:f.name,totalText:$,differenceText:`${p>0?"+"+p:p} с прошлого спринта`,categories:n(v,c,h)}}])}},447:e=>{e.exports=function(e,t){const a=[];return e.forEach((e=>{let i="object"==typeof e.author?e.author.id:e.author,r=a.findIndex((e=>e.id===i));if(-1===r){let e=t.find((e=>e.id===i));a.push({id:e.id,name:e.name,avatar:e.avatar,valueText:1})}else a[r].valueText+=1})),a.sort(((e,t)=>e.valueText>t.valueText?-1:e.valueText<t.valueText?1:0)),a}},155:e=>{e.exports=function(e,t){const a=[];return e.forEach((e=>{let i="object"==typeof e.author?e.author.id:e.author,r=a.findIndex((e=>e.id===i));if(-1===r){let r=t.find((e=>e.id===i));a.push({id:r.id,name:r.name,avatar:r.avatar,valueText:e.likes.length})}else a[r].valueText+=e.likes.length})),a.sort(((e,t)=>e.valueText>t.valueText?-1:e.valueText<t.valueText?1:0)),a.forEach(((e,t)=>{let i;i=1==e.valueText%10?`${e.valueText} голос`:`${e.valueText} голос${e.valueText%10>=5||e.valueText%10==0?"ов":"а"}`,a[t].valueText=i})),a}}},t={};!function a(i){var r=t[i];if(void 0!==r)return r.exports;var s=t[i]={exports:{}};return e[i](s,s.exports,a),s.exports}(138)})();
+function prepareData(entities, { sprintId } ) {
+
+  let sprints = [];
+  let users = [];
+  let comments = [];
+  let commits = [];
+  let summaries = [];
+
+  entities.forEach(obj => {
+    switch (obj.type) {
+      case 'Sprint':
+        sprints.push(obj);
+        break;
+      case 'User':
+        users.push(obj);
+        break;
+      case 'Comment':
+        comments.push(obj);
+        break;
+      case 'Commit':
+        commits.push(obj);
+        break;
+      case 'Summary':
+        summaries.push(obj);
+        break;
+    }
+  })
+
+  const currentSprint = sprints.find(sprint => sprint.id === sprintId);
+  const previousSprint = sprints.find(sprint => sprint.id === sprintId - 1);
+
+  const sprintComments = comments.filter(comment => comment.type === 'Comment' && comment.createdAt >= currentSprint.startAt && comment.createdAt <= currentSprint.finishAt);
+
+  const sprintCommits = commits.filter(commit => commit.timestamp >= currentSprint.startAt && commit.timestamp <= currentSprint.finishAt);
+  const previousSprintCommits = commits.filter(commit => commit.timestamp >= previousSprint.startAt && commit.timestamp <= previousSprint.finishAt);
+
+  //=========== diagram
+  const differenceCommitCount = sprintCommits.length - previousSprintCommits.length;
+  const commitCount = sprintCommits.length;
+  let totalText;
+  if (commitCount % 10 === 1) {
+    totalText = `${commitCount} коммит`;
+  } else {
+    totalText = `${commitCount} коммит${commitCount % 10 >= 5 || commitCount % 10 === 0 ? 'ов' : 'а'}`
+  }
+  //==========
+
+  const commitsLeader = leaders(sprintCommits, users);
+ 
+  return JSON.stringify([
+    {
+      alias: 'vote',
+      data: {
+        "title": 'Самый 🔎 внимательный разработчик',
+        "subtitle": currentSprint.name,
+        "emoji": "🔎",
+        "users": vote(sprintComments, users)
+      }
+    },
+    {
+      alias: 'leaders',
+      data: {
+        "title": 'Больше всего коммитов',
+        "subtitle": currentSprint.name,
+        "emoji": "👑",
+        "users": commitsLeader
+      }
+    },
+    {
+      alias: 'chart',
+      data: {
+        "title": 'Коммиты',
+        "subtitle": currentSprint.name,
+        "values": chart(commits, sprints, sprintId),
+        "users": commitsLeader
+      }
+    },
+    {
+      alias: 'diagram',
+      data: {
+        "title": 'Размер коммитов',
+        "subtitle": currentSprint.name,
+        "totalText": totalText,
+        "differenceText": `${differenceCommitCount > 0 ? '+'+differenceCommitCount : differenceCommitCount} с прошлого спринта`,
+        "categories": diagram(sprintCommits, summaries, previousSprintCommits)
+      }
+    }
+  ])
+}
+
+function chart(commits, allSprints, currentSprintId) {
+
+  const values = [];
+
+  allSprints.forEach(sprint => {
+    let temp = {
+      'title': sprint.id,
+      'hint': sprint.name,
+      'value': 0
+    }
+
+    if (sprint.id === currentSprintId)
+      temp.active =  true;
+
+    values.push(temp)
+  });
+
+  commits.forEach(commit => {
+
+    commit.sprintId = allSprints.find(sprint => commit.timestamp >= sprint.startAt && commit.timestamp <= sprint.finishAt).id;
+
+    let valueIndex = values.findIndex(value => value.title === commit.sprintId);
+
+    if (valueIndex != -1) {
+      values[valueIndex].value += 1;
+    }
+  })
+
+  values.sort((a, b) => {
+    if (a.title < b.title) return -1;
+    if (a.title > b.title) return 1;
+    return 0;
+  });
+
+  return values;
+}
+
+function diagram(sprintCommits, summaries, previousSprintCommits) {
+
+  let previousCommitSizeS = 0;
+  let previousCommitSizeM = 0;
+  let previousCommitSizeL = 0;
+  let previousCommitSizeXL = 0;
+
+  previousSprintCommits.forEach((commit, index) => {
+
+    //Считаем размер комита
+
+    const size = commit.summaries.reduce((accumulator, summary) => {
+      if (typeof summary === 'object') {
+        return accumulator + summary.added + summary.removed;
+      } else {
+        const sumummaryTemp = summaries.find(sum => sum.id === summary);
+        return accumulator + sumummaryTemp.added + sumummaryTemp.removed;
+      }
+    }, 0);
+
+    //Распределяем по группам
+
+    if (size <= 100) previousCommitSizeS += 1
+      else if (size <= 500) previousCommitSizeM += 1
+        else if (size <= 1000) previousCommitSizeL += 1
+          else previousCommitSizeXL += 1
+  })
+
+  let commitSizeS = 0;
+  let commitSizeM = 0;
+  let commitSizeL = 0;
+  let commitSizeXL = 0;
+
+  sprintCommits.forEach((commit, index) => {
+
+    //Считаем размер комита
+
+    const size = commit.summaries.reduce((accumulator, summary) => {
+      if (typeof summary === 'object') {
+        return accumulator + summary.added + summary.removed;
+      } else {
+        const sumummaryTemp = summaries.find(sum => sum.id === summary);
+        return accumulator + sumummaryTemp.added + sumummaryTemp.removed;
+      }
+    }, 0);
+
+    //Распределяем по группам
+
+    if (size <= 100) commitSizeS += 1
+      else if (size <= 500) commitSizeM += 1
+        else if (size <= 1000) commitSizeL += 1
+          else commitSizeXL += 1
+  })
+
+  return [
+    {
+      "title": "> 1001 строки",
+      "valueText": `${commitSizeXL} ${formOfWord(commitSizeXL, 'commit')}`,
+      "differenceText": createDifferenceString(commitSizeXL, previousCommitSizeXL)
+    },
+    {
+      "title": "501 — 1000 строк",
+      "valueText": `${commitSizeL} ${formOfWord(commitSizeL, 'commit')}`,
+      "differenceText": createDifferenceString(commitSizeL, previousCommitSizeL)
+    },
+    {
+      "title": "101 — 500 строк",
+      "valueText": `${commitSizeM} ${formOfWord(commitSizeM, 'commit')}`,
+      "differenceText": createDifferenceString(commitSizeM, previousCommitSizeM)
+    },
+    {"title": "1 — 100 строк",
+    "valueText": `${commitSizeS} ${formOfWord(commitSizeS, 'commit')}`,
+    "differenceText": createDifferenceString(commitSizeS, previousCommitSizeS)
+  }
+  ];
+}
+
+function createDifferenceString(size, preSize) {
+  const difference = size - preSize;
+  return `${difference > 0 ? '+' + difference : difference} ${formOfWord(Math.abs(difference), 'commit')}`
+}
+
+
+function formOfWord(n, word) {
+  words = {
+    commit: ['коммит', 'коммита', 'коммитов']
+  }
+  if (n >= 10 && n < 20) return words[word][2];
+  if (n % 10 === 1) return words[word][0];
+  if (n % 10 < 5) return words[word][1];
+  return words[2];
+}
+
+function leaders(commits, users) {
+
+  const usersForLeaders = [];
+
+  commits.forEach(commit => {
+
+    let userId = typeof commit.author === 'object' ? commit.author.id : commit.author;
+
+    let userIndex = usersForLeaders.findIndex(user => user.id === userId);
+
+    if (userIndex === -1) {
+      let user = users.find(user => user.id === userId);
+      usersForLeaders.push({'id': user.id, 'name': user.name, 'avatar': user.avatar, 'valueText': 1})
+    } else {
+      usersForLeaders[userIndex].valueText += 1;
+    }
+  })
+
+  usersForLeaders.sort((a, b) => {
+    if (a.valueText > b.valueText) return -1;
+    if (a.valueText < b.valueText) return 1;
+    return 0;
+  });
+
+  return usersForLeaders;
+}
+
+function vote(comments, users) {
+  const usersForVote = [];
+
+  comments.forEach(comment => {
+
+    let userId = typeof comment.author === 'object' ? comment.author.id : comment.author;
+
+    let userIndex = usersForVote.findIndex(user => user.id === userId);
+
+    if (userIndex === -1) {
+      let user = users.find(user => user.id === userId);
+      usersForVote.push({'id': user.id, 'name': user.name, 'avatar': user.avatar, 'valueText': comment.likes.length})
+    } else {
+      usersForVote[userIndex].valueText += comment.likes.length;
+    }
+  })
+
+  usersForVote.sort((a, b) => {
+    if (a.valueText > b.valueText) return -1;
+    if (a.valueText < b.valueText) return 1;
+    return 0;
+  });
+
+  usersForVote.forEach((user, index) => {
+    const lastChar = user.valueText % 10;
+    let temp;
+    if (lastChar === 1) {
+      temp = `${user.valueText} голос`;
+    } else {
+      temp = `${user.valueText} голос${user.valueText % 10 >= 5 || user.valueText % 10 === 0 ? 'ов' : 'а'}`
+    }
+    usersForVote[index].valueText = temp;
+  });
+
+  return usersForVote;
+}
+
+module.exports = {prepareData}

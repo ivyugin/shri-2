@@ -93,4 +93,4 @@ function prepareData(entities, { sprintId } ) {
   ])
 }
 
-module.exports = prepareData;
+module.exports = {prepareData}
