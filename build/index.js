@@ -262,6 +262,8 @@ function prepareData(entities, { sprintId }) {
     && commit.timestamp <= previousSprint.finishAt,
   );
 
+  // const commitsLeader = leaders(sprintCommits, users);
+
   return [
     {
       alias: 'leaders',
@@ -306,3 +308,4 @@ function prepareData(entities, { sprintId }) {
 }
 
 module.exports = { prepareData };
+
