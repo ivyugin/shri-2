@@ -33,6 +33,10 @@ function chart(commits, allSprints, currentSprintId) {
     return 0;
   });
 
+  values.forEach((value, index) => {
+    values[index].title = values[index].title.toString();
+  });
+
   return values;
 }
 

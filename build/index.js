@@ -5,6 +5,7 @@ function formOfWord(n, word) {
   };
   if (n >= 10 && n < 20) return words[word][2];
   if (n % 10 === 1) return words[word][0];
+  if (n % 10 === 0) return words[word][2];
   if (n % 10 < 5) return words[word][1];
   return words[word][2];
 }
@@ -64,6 +65,10 @@ function chart(commits, allSprints, currentSprintId) {
     if (a.title < b.title) return -1;
     if (a.title > b.title) return 1;
     return 0;
+  });
+
+  values.forEach((value, index) => {
+    values[index].title = values[index].title.toString();
   });
 
   return values;
@@ -173,6 +178,10 @@ function leaders(commits, users) {
     return 0;
   });
 
+  usersForLeaders.forEach((user, index) => {
+    usersForLeaders[index].valueText = usersForLeaders[index].valueText.toString();
+  });
+
   return usersForLeaders;
 }
 
@@ -211,7 +220,6 @@ function vote(comments, users) {
 }
 
 function prepareData(entities, { sprintId }) {
-
   const sprints = [];
   const users = [];
   const comments = [];
