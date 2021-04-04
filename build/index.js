@@ -176,8 +176,6 @@ function leaders(commits, users) {
   return usersForLeaders;
 }
 
-const { formOfWord } = require('./utilites');
-
 function vote(comments, users) {
   const usersForVote = [];
 
@@ -213,11 +211,6 @@ function vote(comments, users) {
 }
 
 function prepareData(entities, { sprintId }) {
-  const leaders = require('./leaders');
-  const vote = require('./vote');
-  const chart = require('./chart');
-  const diagram = require('./diagram');
-  const activity = require('./activity');
 
   const sprints = [];
   const users = [];
