@@ -1,4 +1,4 @@
 const entity = require('./examples/input.json');
-const {prepareData} = require('./build/index.js');
+const { prepareData } = require('./src/index.js');
 
-console.log(typeof prepareData(entity, { sprintId: 977 })); 
+console.log(JSON.stringify( prepareData(entity, { sprintId: 977 }) )); 
