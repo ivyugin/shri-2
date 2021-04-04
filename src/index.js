@@ -47,6 +47,8 @@ function prepareData(entities, { sprintId }) {
     && commit.timestamp <= previousSprint.finishAt,
   );
 
+  const commitsLeader = leaders(sprintCommits, users);
+
   return [
     {
       alias: 'leaders',
@@ -54,7 +56,7 @@ function prepareData(entities, { sprintId }) {
         title: 'Больше всего коммитов',
         subtitle: currentSprint.name,
         emoji: '👑',
-        users: leaders(sprintCommits, users),
+        users: commitsLeader,
       },
     },
     {
@@ -72,7 +74,7 @@ function prepareData(entities, { sprintId }) {
         title: 'Коммиты',
         subtitle: currentSprint.name,
         values: chart(commits, sprints, sprintId),
-        users: leaders(sprintCommits, users),
+        users: commitsLeader,
       },
     },
     {

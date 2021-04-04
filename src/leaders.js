@@ -20,7 +20,7 @@ function leaders(commits, users) {
   });
 
   usersForLeaders.sort((a, b) => {
-    if (a.valueText > b.valueText) return -1;
+    if (a.valueText >= b.valueText) return -1;
     if (a.valueText < b.valueText) return 1;
     return 0;
   });
