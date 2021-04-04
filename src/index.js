@@ -51,21 +51,21 @@ function prepareData(entities, { sprintId }) {
 
   return [
     {
-      alias: 'vote',
-      data: {
-        title: 'Самый 🔎 внимательный разработчик',
-        subtitle: currentSprint.name,
-        emoji: '🔎',
-        users: vote(sprintComments, users),
-      },
-    },
-    {
       alias: 'leaders',
       data: {
         title: 'Больше всего коммитов',
         subtitle: currentSprint.name,
         emoji: '👑',
         users: commitsLeader,
+      },
+    },
+    {
+      alias: 'vote',
+      data: {
+        title: 'Самый 🔎 внимательный разработчик',
+        subtitle: currentSprint.name,
+        emoji: '🔎',
+        users: vote(sprintComments, users),
       },
     },
     {

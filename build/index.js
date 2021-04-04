@@ -3,7 +3,7 @@ function formOfWord(n, word) {
     commit: ['коммит', 'коммита', 'коммитов'],
     vote: ['голос', 'голоса', 'голосов'],
   };
-  if (n >= 10 && n < 20) return words[word][2];
+  if (n % 100 >= 10 && n % 100 < 20) return words[word][2];
   if (n % 10 === 1) return words[word][0];
   if (n % 10 === 0) return words[word][2];
   if (n % 10 < 5) return words[word][1];
@@ -220,6 +220,7 @@ function vote(comments, users) {
 }
 
 function prepareData(entities, { sprintId }) {
+
   const sprints = [];
   const users = [];
   const comments = [];
@@ -266,21 +267,21 @@ function prepareData(entities, { sprintId }) {
 
   return [
     {
-      alias: 'vote',
-      data: {
-        title: 'Самый 🔎 внимательный разработчик',
-        subtitle: currentSprint.name,
-        emoji: '🔎',
-        users: vote(sprintComments, users),
-      },
-    },
-    {
       alias: 'leaders',
       data: {
         title: 'Больше всего коммитов',
         subtitle: currentSprint.name,
         emoji: '👑',
         users: commitsLeader,
+      },
+    },
+    {
+      alias: 'vote',
+      data: {
+        title: 'Самый 🔎 внимательный разработчик',
+        subtitle: currentSprint.name,
+        emoji: '🔎',
+        users: vote(sprintComments, users),
       },
     },
     {
