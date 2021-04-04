@@ -178,6 +178,10 @@ function leaders(commits, users) {
     return 0;
   });
 
+  usersForLeaders.forEach((user, index) => {
+    usersForLeaders[index].valueText = `${user.valueText}`;
+  });
+
   return usersForLeaders;
 }
 
