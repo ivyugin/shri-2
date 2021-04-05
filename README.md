@@ -5,10 +5,10 @@
 Услоовия тут: https://github.com/yndx-shri/shri-2021-task-2
 
 Для запуска: 
- ```sh
-    npm start
-    ```
+```sh
+npm start
+```
 Для тестов:
- ```sh
-    npm test
-    ```
+```sh
+npm test
+```
