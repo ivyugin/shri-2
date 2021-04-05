@@ -7,9 +7,9 @@
     "example": "examples"
   },
   "scripts": {
-    "start": "node ./src/index.js",
+    "start": "node ./test.js",
     "build": "rm -rf build && webpack",
-    "test": "node ./test.js"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +21,7 @@
     "eslint": "^7.23.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
+    "jest": "^26.6.3",
     "webpack": "^5.30.0",
     "webpack-cli": "^4.6.0"
   },
